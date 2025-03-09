@@ -74,7 +74,7 @@ if uploaded_file:
     docs = splitter.split_documents(documents)
 
     embeddings = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(docs, embeddings)
+    vectordb = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
     st.session_state.vectordb = vectordb
 
     st.success("✅ Document uploaded and processed successfully!")
