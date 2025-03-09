@@ -1,7 +1,7 @@
 streamlit
 langchain
 openai
-chromadb
+chromadb --upgrade
 python-dotenv
 pypdf
 tiktoken
