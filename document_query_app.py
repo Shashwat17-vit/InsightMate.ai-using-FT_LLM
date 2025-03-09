@@ -1,14 +1,15 @@
 import streamlit as st
-from langchain.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.vectorstores import Chroma
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 import tempfile, os
 from dotenv import load_dotenv
 
+# SQLite fix for Python 3.12
 __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
@@ -20,32 +21,19 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 st.set_page_config(page_title="DocInsight Query System", page_icon="📘", layout="centered")
 st.markdown('''
 <style>
-body, html {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+[data-testid="stAppViewContainer"] {
     background-color: #f0f4f8;
-    color: #333333;
+    color: #333;
 }
-
 .stTextInput>div>div>input, .stButton>button {
     border-radius: 10px;
     border: 1px solid #2563eb;
     padding: 8px;
 }
-
 .stButton>button {
     background-color: #2563eb;
     color: white;
-    transition: background-color 0.3s ease;
 }
-
-.stButton>button:hover {
-    background-color: #1e40af;
-}
-
-.stMarkdown h1, .stMarkdown h2, .stMarkdown h3 {
-    color: #2563eb;
-}
-
 .message-container {
     background-color: #ffffff;
     border-radius: 10px;
@@ -58,16 +46,13 @@ body, html {
 
 st.title("📘 DocInsight Query System")
 
-from langchain.vectorstores import Weaviate
-from langchain.embeddings.openai import OpenAIEmbeddings
-
-
-
 # Initialize session states
 if 'vectordb' not in st.session_state:
     st.session_state.vectordb = None
 if 'memory' not in st.session_state:
     st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
+if 'messages' not in st.session_state:
+    st.session_state.messages = []
 
 # PDF Uploader
 uploaded_file = st.file_uploader("📤 Upload PDF (must contain text)", type=["pdf"])
@@ -87,27 +72,22 @@ if uploaded_file:
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=200)
     docs = splitter.split_documents(documents)
-    
 
     embeddings = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
+    vectordb = Chroma.from_documents(docs, embeddings)
     st.session_state.vectordb = vectordb
 
     st.success("✅ Document uploaded and processed successfully!")
 
-# Interactive Chat
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# Display conversation history as a chat dialog
+# Display conversation history
 st.markdown("### 💬 Conversation")
 for msg in st.session_state.messages:
     role = "**DocInsight:**" if msg["role"] == "ai" else "**You:**"
     st.markdown(f"<div class='message-container'>{role} {msg['content']}</div>", unsafe_allow_html=True)
 
 # User input
-query = st.text_input("Enter your query:", key="query")
-if st.button("Submit"):
+query = st.text_input("Ask DocInsight about your document:", key="query")
+if st.button("Send"):
     if st.session_state.vectordb and query.strip():
         qa_chain = ConversationalRetrievalChain.from_llm(
             ChatOpenAI(model_name="gpt-4-0125-preview"),
@@ -120,7 +100,7 @@ if st.button("Submit"):
         st.session_state.messages.append({"role": "ai", "content": response["answer"]})
 
         st.rerun()
-    elif query.strip() == "":
+    elif not query.strip():
         st.warning("⚠️ Please enter a valid query.")
     else:
         st.error("⚠️ Please upload a PDF document first!")
