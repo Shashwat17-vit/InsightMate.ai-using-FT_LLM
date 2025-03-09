@@ -58,6 +58,11 @@ body, html {
 
 st.title("📘 DocInsight Query System")
 
+from langchain.vectorstores import Weaviate
+from langchain.embeddings.openai import OpenAIEmbeddings
+
+
+
 # Initialize session states
 if 'vectordb' not in st.session_state:
     st.session_state.vectordb = None
@@ -82,9 +87,10 @@ if uploaded_file:
 
     splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=200)
     docs = splitter.split_documents(documents)
+    
 
     embeddings = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(docs, embeddings)
+    vectordb = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
     st.session_state.vectordb = vectordb
 
     st.success("✅ Document uploaded and processed successfully!")
