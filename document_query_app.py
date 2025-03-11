@@ -13,16 +13,13 @@ from dotenv import load_dotenv
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
-# Set page configuration
+# Set page configuration and hide specific UI elements including the "Manage app" button
 st.set_page_config(page_title="DocInsight Query System", page_icon="📘", layout="centered")
-
-# CSS to hide Streamlit's default UI elements and the "Manage app" button
 st.markdown('''
 <style>
 header {visibility: hidden;}  /* Hide the Streamlit header */
 footer {visibility: hidden;}  /* Hide the Streamlit footer */
-button[aria-label="Open sidebar"], div[data-testid="stDecoration"] {  /* Hiding sidebar button and "Manage app" button */
-    visibility: hidden !important;
+[data-testid="stDecoration"] {  /* This is typically used to target the "Manage app" button */
     display: none !important;
 }
 [data-testid="stAppViewContainer"] { background-color: #f0f4f8; color: #333; }
