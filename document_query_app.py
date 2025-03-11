@@ -90,4 +90,4 @@ if st.button("Send") and query:
 # Clear conversation button
 if st.button("Clear Conversation"):
     reset_states()
-    st.experimental_rerun()
+    #st.experimental_rerun()
