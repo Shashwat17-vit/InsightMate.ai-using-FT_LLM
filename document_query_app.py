@@ -83,11 +83,11 @@ if st.button("Send") and query:
         response = qa_chain({"question": query})
         st.session_state.messages.append({"role": "user", "content": query})
         st.session_state.messages.append({"role": "ai", "content": response["answer"]})
-        st.experimental_rerun()
+        st.rerun()
     else:
         st.error("⚠️ Please upload a PDF document first!")
 
 # Clear conversation button
 if st.button("Clear Conversation"):
     reset_states()
-    #st.experimental_rerun()
+    st.rerun()
