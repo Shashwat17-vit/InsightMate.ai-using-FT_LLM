@@ -13,11 +13,14 @@ from dotenv import load_dotenv
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
+# Set page configuration
 st.set_page_config(page_title="DocInsight Query System", page_icon="📘", layout="centered")
 
-# Styling
+# CSS to hide the header, footer, and manage the rest of the UI
 st.markdown('''
 <style>
+header {visibility: hidden;}  /* Hide the Streamlit header */
+footer {visibility: hidden;}  /* Hide the Streamlit footer */
 [data-testid="stAppViewContainer"] { background-color: #f0f4f8; color: #333; }
 .stTextInput>div>div>input, .stButton>button { border-radius: 10px; border: 1px solid #2563eb; padding: 8px; }
 .stButton>button { background-color: #2563eb; color: white; }
