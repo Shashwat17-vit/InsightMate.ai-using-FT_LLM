@@ -93,7 +93,7 @@ if uploaded_file:
         embeddings = OpenAIEmbeddings()
         vectordb = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
         st.session_state.vectordb = vectordb
-        st.success("✅ Document uploaded and processed successfully!")
+        st.success("✅ Document uploaded and processed successfully! Now you can ask queries!")
 
     except Exception as e:
         st.error(f"Failed to process the PDF: {str(e)}")
