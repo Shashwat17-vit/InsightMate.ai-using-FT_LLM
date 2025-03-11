@@ -46,38 +46,43 @@ st.markdown('''
 
 st.title("📘 DocInsight Query System")
 
-# Initialize session states
-if 'vectordb' not in st.session_state:
+# Initialize or reset session states
+if 'vectordb' not in st.session_state or st.session_state.reset:
     st.session_state.vectordb = None
-if 'memory' not in st.session_state:
+if 'memory' not in st.session_state or st.session_state.reset:
     st.session_state.memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-if 'messages' not in st.session_state:
+if 'messages' not in st.session_state or st.session_state.reset:
     st.session_state.messages = []
+st.session_state.reset = False  # Reset the flag
 
 # PDF Uploader
-uploaded_file = st.file_uploader("📤 Upload PDF (must contain text)", type=["pdf"])
+uploaded_file = st.file_uploader("📤 Upload PDF (must contain text)", type=["pdf"], on_change=lambda: setattr(st.session_state, 'reset', True))
 
 if uploaded_file:
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmp_file:
         tmp_file.write(uploaded_file.getbuffer())
         tmp_file_path = tmp_file.name
 
-    loader = PyPDFLoader(tmp_file_path)
-    documents = loader.load()
+    try:
+        loader = PyPDFLoader(tmp_file_path)
+        documents = loader.load()
 
-    full_text = " ".join([doc.page_content.strip() for doc in documents])
-    if not full_text.strip():
-        st.error("❌ PDF contains no extractable text. Please upload another document.")
+        full_text = " ".join([doc.page_content.strip() for doc in documents])
+        if not full_text.strip():
+            st.error("❌ PDF contains no extractable text. Please upload another document.")
+            st.stop()
+
+        splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=200)
+        docs = splitter.split_documents(documents)
+
+        embeddings = OpenAIEmbeddings()
+        vectordb = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
+        st.session_state.vectordb = vectordb
+
+        st.success("✅ Document uploaded and processed successfully!")
+    except Exception as e:
+        st.error(f"Failed to process the PDF: {str(e)}")
         st.stop()
-
-    splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=200)
-    docs = splitter.split_documents(documents)
-
-    embeddings = OpenAIEmbeddings()
-    vectordb = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
-    st.session_state.vectordb = vectordb
-
-    st.success("✅ Document uploaded and processed successfully!")
 
 # Display conversation history
 st.markdown("### 💬 Conversation")
@@ -104,3 +109,9 @@ if st.button("Send"):
         st.warning("⚠️ Please enter a valid query.")
     else:
         st.error("⚠️ Please upload a PDF document first!")
+
+# Clear conversation button
+if st.button("Clear Conversation"):
+    st.session_state.messages = []
+    st.session_state.memory.clear_memory()
+    st.experimental_rerun()
