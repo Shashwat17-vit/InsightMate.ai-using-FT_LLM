@@ -22,9 +22,23 @@ footer {visibility: hidden;}  /* Hide the Streamlit footer */
 [data-testid="stDecoration"] {  /* This is typically used to target the "Manage app" button */
     display: none !important;
 }
+[data-testid="stAppViewContainer"]::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('images/Aerial_Bascom3b.jpg'); /* Update with your image's URL */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.5;  /* Adjust opacity as needed for text visibility */
+    z-index: -1;
+}
 [data-testid="stAppViewContainer"], body {
-    background-color: #f8f9fa; /* Light grey background */
-    color: #212529; /* Dark grey text */
+    background-color: transparent; /* Allow the background image to show through */
+    color: #212529; /* Dark grey text to ensure readability */
 }
 .stTextInput>div>div>input, .stButton>button {
     border-radius: 10px;
