@@ -1,4 +1,4 @@
-import streamlit as st
+ streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -16,11 +16,15 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 # Set page configuration
 st.set_page_config(page_title="DocInsight Query System", page_icon="📘", layout="centered")
 
-# CSS to hide the header, footer, and manage the rest of the UI
+# CSS to hide Streamlit's default UI elements and the "Manage app" button
 st.markdown('''
 <style>
 header {visibility: hidden;}  /* Hide the Streamlit header */
 footer {visibility: hidden;}  /* Hide the Streamlit footer */
+button[aria-label="Open sidebar"], div[data-testid="stDecoration"] {  /* Hiding sidebar button and "Manage app" button */
+    visibility: hidden !important;
+    display: none !important;
+}
 [data-testid="stAppViewContainer"] { background-color: #f0f4f8; color: #333; }
 .stTextInput>div>div>input, .stButton>button { border-radius: 10px; border: 1px solid #2563eb; padding: 8px; }
 .stButton>button { background-color: #2563eb; color: white; }
