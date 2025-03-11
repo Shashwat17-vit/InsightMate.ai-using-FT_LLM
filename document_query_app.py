@@ -22,10 +22,26 @@ footer {visibility: hidden;}  /* Hide the Streamlit footer */
 [data-testid="stDecoration"] {  /* This is typically used to target the "Manage app" button */
     display: none !important;
 }
-[data-testid="stAppViewContainer"] { background-color: #f0f4f8; color: #333; }
-.stTextInput>div>div>input, .stButton>button { border-radius: 10px; border: 1px solid #2563eb; padding: 8px; }
-.stButton>button { background-color: #2563eb; color: white; }
-.message-container { background-color: #ffffff; border-radius: 10px; padding: 10px; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+[data-testid="stAppViewContainer"], body {
+    background-color: #f8f9fa; /* Light grey background */
+    color: #212529; /* Dark grey text */
+}
+.stTextInput>div>div>input, .stButton>button {
+    border-radius: 10px;
+    border: 1px solid #495057; /* Dark grey border */
+    padding: 8px;
+}
+.stButton>button {
+    background-color: #007bff; /* Bootstrap blue */
+    color: white;
+}
+.message-container {
+    background-color: #ffffff; /* White background for message containers */
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Slightly stronger shadow */
+}
 </style>
 ''', unsafe_allow_html=True)
 
