@@ -1,3 +1,7 @@
+import numpy as np
+if not hasattr(np, 'float_'):  # Ensure compatibility with NumPy 2.0
+    np.float_ = np.float64
+
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -17,51 +21,8 @@ __import__('pysqlite3')
 import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
-# Set page configuration and hide specific UI elements including the "Manage app" button
+# Set Streamlit page configuration
 st.set_page_config(page_title="DocInsight Query System", page_icon="📘", layout="centered")
-st.markdown('''
-<style>
-header {visibility: hidden;}  /* Hide the Streamlit header */
-footer {visibility: hidden;}  /* Hide the Streamlit footer */
-[data-testid="stDecoration"] {  /* This is typically used to target the "Manage app" button */
-    display: none !important;
-}
-[data-testid="stAppViewContainer"]::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('images/Aerial_Bascom3b.jpg'); /* Update with your image's URL */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    opacity: 0.5;  /* Adjust opacity as needed for text visibility */
-    z-index: -1;
-}
-[data-testid="stAppViewContainer"], body {
-    background-color: transparent; /* Allow the background image to show through */
-    color: #212529; /* Dark grey text to ensure readability */
-}
-.stTextInput>div>div>input, .stButton>button {
-    border-radius: 10px;
-    border: 1px solid #495057; /* Dark grey border */
-    padding: 8px;
-}
-.stButton>button {
-    background-color: #007bff; /* Bootstrap blue */
-    color: white;
-}
-.message-container {
-    background-color: #ffffff; /* White background for message containers */
-    border-radius: 10px;
-    padding: 10px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Slightly stronger shadow */
-}
-</style>
-''', unsafe_allow_html=True)
 
 st.title("📘 DocInsight Query System")
 
@@ -92,10 +53,17 @@ if uploaded_file:
             st.error("❌ PDF contains no extractable text. Please upload another document.")
             st.stop()
 
+        # Process the document
         splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=200)
         docs = splitter.split_documents(documents)
         embeddings = OpenAIEmbeddings()
-        vectordb = Chroma.from_documents(documents=docs,embedding=embeddings,persist_directory="./chroma_db2")
+
+        # Initialize Chroma with fixed embedding function
+        persist_directory = "./chroma_db2"
+        vectordb = Chroma(persist_directory=persist_directory, embedding_function=embeddings)
+        vectordb.add_documents(docs)  # Properly add documents
+
+        # Store in session state
         st.session_state.vectordb = vectordb
         st.success("✅ Document uploaded and processed successfully! Now you can ask queries!")
 
