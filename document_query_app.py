@@ -12,13 +12,14 @@ from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 import tempfile, os
 from dotenv import load_dotenv
-
+import sys
 # Load environment variables
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 __import__('pysqlite3')
 import sys
+import pysqlite3
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 
 # Set Streamlit page configuration
