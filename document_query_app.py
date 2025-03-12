@@ -13,11 +13,6 @@ from dotenv import load_dotenv
 load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
-__import__('pysqlite3')
-import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-
-
 # Set page configuration and hide specific UI elements including the "Manage app" button
 st.set_page_config(page_title="DocInsight Query System", page_icon="📘", layout="centered")
 st.markdown('''
