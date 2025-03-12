@@ -91,7 +91,7 @@ if uploaded_file:
         splitter = RecursiveCharacterTextSplitter(chunk_size=750, chunk_overlap=200)
         docs = splitter.split_documents(documents)
         embeddings = OpenAIEmbeddings()
-        vectordb = Chroma.from_documents(docs, embeddings, persist_directory="./chroma_db")
+        vectordb = Chroma.from_documents(documents=docs,embedding=embeddings,persist_directory="./chroma_db")
         st.session_state.vectordb = vectordb
         st.success("✅ Document uploaded and processed successfully! Now you can ask queries!")
 
