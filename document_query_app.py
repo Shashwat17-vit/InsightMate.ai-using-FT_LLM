@@ -70,7 +70,7 @@ if uploaded_file:
 
         # Store user-specific vector database
         st.session_state[f"vectordb_{session_id}"] = vectordb
-        st.success("✅ Document uploaded and processed successfully! Now you can ask queries!")
+        st.success("✅ Document uploaded and processed successfully! Now you can ask queries based on the document!")
 
     except Exception as e:
         st.error(f"Failed to process the PDF: {str(e)}")
@@ -82,25 +82,33 @@ for msg in st.session_state[f"messages_{session_id}"]:
     role = "**DocInsight:**" if msg["role"] == "ai" else "**You:**"
     st.markdown(f"<div class='message-container'>{role} {msg['content']}</div>", unsafe_allow_html=True)
 
-# ✅ **Step 7: Handle User Queries**
-query = st.text_input("Ask DocInsight about your document:", key=f"query_{session_id}")
+# ✅ **Step 7: Handle User Queries (Two Modes)**
+query = st.text_input("Ask a question about Shashwat or uploaded document:", key=f"query_{session_id}")
 
 if st.button("Send") and query:
     if st.session_state[f"vectordb_{session_id}"]:
+        # If document is uploaded, use retrieval-based answers
         qa_chain = ConversationalRetrievalChain.from_llm(
             ChatOpenAI(model_name="ft:gpt-3.5-turbo-0125:personal:negi3:BD1U9AZL"),  # ✅ Using fine-tuned model
             retriever=st.session_state[f"vectordb_{session_id}"].as_retriever(),
             memory=st.session_state[f"memory_{session_id}"]
         )
-        response = qa_chain({"question": query})
-        
-        # Store conversation in session-specific history
-        st.session_state[f"messages_{session_id}"].append({"role": "user", "content": query})
-        st.session_state[f"messages_{session_id}"].append({"role": "ai", "content": response["answer"]})
-        
-        st.rerun()
+        response = qa_chain({"question": query})  # Use document retrieval
+
     else:
-        st.error("⚠️ Please upload a PDF document first!")
+        # If no document is uploaded, answer general questions about Shashwat
+        chat_model = ChatOpenAI(model_name="ft:gpt-3.5-turbo-0125:personal:negi3:BD1U9AZL")
+        response = chat_model.predict_messages([
+            {"role": "system", "content": "You are a helpful assistant. Answer user queries based on Shashwat Negi's skills, experience, and projects."},
+            {"role": "user", "content": query}
+        ])
+        response = {"answer": response.content}  # Extract the response text
+
+    # Store conversation in session-specific history
+    st.session_state[f"messages_{session_id}"].append({"role": "user", "content": query})
+    st.session_state[f"messages_{session_id}"].append({"role": "ai", "content": response["answer"]})
+
+    st.rerun()
 
 # ✅ **Step 8: Clear Conversation (Only for Current Session)**
 if st.button("Clear Conversation"):
