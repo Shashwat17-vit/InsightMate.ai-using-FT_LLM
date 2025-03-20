@@ -8,6 +8,7 @@ from langchain_community.vectorstores import Chroma
 from langchain.chains import ConversationalRetrievalChain
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
+from langchain.schema import AIMessage, HumanMessage, SystemMessage  # ✅ FIXED: Use correct message format
 import tempfile, os
 from dotenv import load_dotenv
 import sys
@@ -99,8 +100,8 @@ if st.button("Send") and query:
         # If no document is uploaded, answer general questions about Shashwat
         chat_model = ChatOpenAI(model_name="ft:gpt-3.5-turbo-0125:personal:negi3:BD1U9AZL")
         response = chat_model.predict_messages([
-            {"role": "system", "content": "You are a helpful assistant. Answer user queries based on Shashwat Negi's skills, experience, and projects."},
-            {"role": "user", "content": query}
+            SystemMessage(content="You are a helpful assistant. Answer user queries based on Shashwat Negi's skills, experience, and projects."),  # ✅ FIXED SYSTEM MESSAGE
+            HumanMessage(content=query)  # ✅ FIXED HUMAN MESSAGE
         ])
         response = {"answer": response.content}  # Extract the response text
 
