@@ -88,7 +88,7 @@ query = st.text_input("Ask DocInsight about your document:", key=f"query_{sessio
 if st.button("Send") and query:
     if st.session_state[f"vectordb_{session_id}"]:
         qa_chain = ConversationalRetrievalChain.from_llm(
-            ChatOpenAI(model_name="gpt-4-0125-preview"),
+            ChatOpenAI(model_name="ft:gpt-3.5-turbo-0125:personal:negi3:BD1U9AZL"),  # ✅ Using fine-tuned model
             retriever=st.session_state[f"vectordb_{session_id}"].as_retriever(),
             memory=st.session_state[f"memory_{session_id}"]
         )
