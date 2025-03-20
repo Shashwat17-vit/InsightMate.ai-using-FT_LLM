@@ -28,7 +28,19 @@ os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 # Set Streamlit page configuration
 st.set_page_config(page_title="📘 DocInsight Query System", page_icon="📘", layout="centered")
 
-st.title("📘 DocInsight Query System")
+# ✅ **New Content About the Application**
+st.markdown("""
+# 📘 DocInsight Query System  
+#### Built by **Shashwat Negi**  
+> 💡 Know more about him by asking questions in the textbox below.  
+> 🚀 The chatbot is **fine-tuned on GPT-3.5** and may produce **limited** or **inaccurate** results.  
+> 📌 The **best way to know about him** is by connecting on LinkedIn:  
+
+[![Connect on LinkedIn](https://img.shields.io/badge/Connect%20on%20LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/shashwat-negi3)
+
+---
+📂 **Upload a PDF** to receive **more accurate and faster responses** based on the document's content.
+""", unsafe_allow_html=True)
 
 # ✅ **Step 1: Assign Unique Session ID**
 if "session_id" not in st.session_state:
