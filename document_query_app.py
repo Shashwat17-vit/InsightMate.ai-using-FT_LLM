@@ -30,7 +30,7 @@ st.set_page_config(page_title="📘 InfoSage Query System", page_icon="📘", la
 
 # ✅ **New Content About the Application**
 st.markdown("""
-# 📘 DocInsight Query System  
+# 📘 InfoSage Query System  
 #### Built by **Shashwat Negi**  
 > 💡 Know more about him by asking questions in the textbox below.  
 > 🚀 The chatbot uses a fine-tuned LLM model and may produce **inaccurate** results.  
