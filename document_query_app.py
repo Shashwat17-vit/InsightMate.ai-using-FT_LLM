@@ -34,7 +34,7 @@ st.markdown("""
 #### Built by **Shashwat Negi**  
 > 💡 Know more about him by asking questions in the textbox below.  
 > 🚀 The chatbot uses a fine-tuned LLM model and may produce **inaccurate** results.  
-> 📌 The **best way to know about him** is by connecting on LinkedIn:  
+> 📌 The **best way to know about me** is by connecting on LinkedIn:  
 
 [![Connect on LinkedIn](https://img.shields.io/badge/Connect%20on%20LinkedIn-blue?style=flat&logo=linkedin)](https://www.linkedin.com/in/shashwat-negi3/)
 
