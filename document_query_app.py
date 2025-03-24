@@ -26,11 +26,11 @@ load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 # Set Streamlit page configuration
-st.set_page_config(page_title="📘 InfoSage Query System", page_icon="📘", layout="centered")
+st.set_page_config(page_title="📘 InsightMate.ai Query System", page_icon="📘", layout="centered")
 
 # ✅ **New Content About the Application**
 st.markdown("""
-# 📘 InfoSage Query System  
+# 📘 InsightMate.ai Query System  
 #### Built by **Shashwat Negi**  
 > 💡 Know more about him by asking questions in the textbox below.  
 > 🚀 The chatbot uses a fine-tuned LLM model and may produce **inaccurate** results.  
