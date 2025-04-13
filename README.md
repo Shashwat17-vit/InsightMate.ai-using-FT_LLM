@@ -1,4 +1,4 @@
-# 🤖 InsightMate.ai Query System
+# InsightMate.ai Query System
 
 **InsightMate** is a RAG-based AI chatbot designed to intelligently comprehend documents and deliver precise, context-aware answers. Powered by a fine-tuned `gpt-3.5-turbo` model, it also offers **real-time, personalized insights** about the creator's background, experiences, and skill set.
 
