@@ -2,7 +2,7 @@
 
 **InsightMate** is a RAG-based AI chatbot designed to intelligently comprehend documents and deliver precise, context-aware answers. Powered by a fine-tuned `gpt-3.5-turbo` model, it also offers **real-time, personalized insights** about the creator's background, experiences, and skill set.
 
-![InsightMate Interface](insightmate_interface.png)
+![InsightMate Interface](images/insightmate_interface.png)
 
 ## 🚀 Features
 
@@ -22,7 +22,7 @@
 
 Users can ask questions directly about **Shashwat Negi** to learn about his skills, experiences, and aspirations.
 
-![Query About Shashwat](insightmate_query_about_me.png)
+![Query About Shashwat](images/insightmate_query_about_me.png)
 
 ## 🧰 Tech Stack
 
