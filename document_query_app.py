@@ -26,7 +26,7 @@ load_dotenv()
 os.environ["OPENAI_API_KEY"] = os.getenv("OPENAI_API_KEY")
 
 # Set Streamlit page configuration
-st.set_page_config(page_title="📘 InsightMate.ai Query System", page_icon="📘", layout="centered")
+st.set_page_config(page_title="📘 InsightMate.ai", page_icon="📘", layout="centered")
 
 # ✅ **New Content About the Application**
 st.markdown("""
