@@ -30,7 +30,7 @@ st.set_page_config(page_title="📘 InsightMate.ai", page_icon="📘", layout="c
 
 # ✅ **New Content About the Application**
 st.markdown("""
-# 📘 InsightMate.ai Query System  
+# 📘 InsightMate.ai  
 #### Built by **Shashwat Negi**  
 > 💡 Know more about him by asking questions in the textbox below.  
 > 🚀 The chatbot uses a fine-tuned LLM model and may produce **inaccurate** results.  
